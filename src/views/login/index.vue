@@ -31,7 +31,7 @@ export default {
   data() {
       return {
         user: {
-          mobile: '13911111111',
+          mobile: '13922222222',
           code: '246810',
           isAgree: true 
         },
@@ -86,6 +86,9 @@ export default {
             type: 'success'
             })
             this.loginLoading = false
+
+            //将接口返回的数据保存到本地，以备之后使用，但本地存储只能保存字符串，所有要把数据转换为字符串
+            window.localStorage.setItem('user',JSON.stringify(res.data.data))
 
             //跳转到首页
             //this.$router.push('/')

@@ -11,8 +11,8 @@
             </div>
             <el-dropdown>
                 <div class="avatar-wrap">
-                    <img src="@/assets/logo/favicon-32x32.png" alt="">
-                    <span>用户昵称</span>
+                    <img :src="user.photo" alt="">
+                    <span>{{user.name}}</span>
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </div>
             <el-dropdown-menu slot="dropdown">
@@ -30,10 +30,27 @@
 
 <script>
 import AppAside from './components/aside'
+import { requestUserProfile } from '@/api/user'
 export default {
     name:'LayoutIndex',
     components: {
         AppAside
+    },
+    data(){
+        return {
+            user: {}
+        }
+    },
+    created () {
+        //组件初始化，获取用户资料
+        this.loadUserProfile()
+    },
+    methods: {
+        loadUserProfile(){
+            requestUserProfile().then(res => {
+                this.user = res.data.data
+            })
+        }
     }
 }
 </script>
@@ -70,6 +87,6 @@ export default {
     }
 }
 .main {
-    //background-color: #e9eef3;
+    background-color: #fff;
 }
 </style>
