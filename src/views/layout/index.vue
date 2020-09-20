@@ -1,12 +1,14 @@
 <template>
   <el-container class="container">
-    <el-aside class="aside" width="200px">
-        <app-aside class="aside-menu"/>
+    <el-aside class="aside" width="auto">
+        <app-aside class="aside-menu" :iscollapse="isCollapse"/>
     </el-aside>
     <el-container>
         <el-header class="header">
             <div>
-                <i class="el-icon-s-fold"></i>
+                <i 
+                :class="{'el-icon-s-fold':!isCollapse,'el-icon-s-unfold':isCollapse}"
+                @click="isCollapse=!isCollapse"></i>
                 <span>我的博客管理页面</span>
             </div>
             <el-dropdown>
@@ -38,7 +40,8 @@ export default {
     },
     data(){
         return {
-            user: {}
+            user: {},
+            isCollapse: false
         }
     },
     created () {

@@ -5,7 +5,8 @@
       background-color="#002055"
       text-color="#fff"
       active-text-color="#ffd04b"
-      router>
+      router
+      :collapse="iscollapse">
       <el-menu-item index="/">
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
@@ -40,9 +41,7 @@
 <script>
 export default {
     name:'AppAside',
-    methods: {
-
-    }
+    props: ['iscollapse']
 }
 </script>
 
