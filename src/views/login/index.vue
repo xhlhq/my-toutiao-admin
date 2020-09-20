@@ -31,9 +31,9 @@ export default {
   data() {
       return {
         user: {
-          mobole: '',
-          code: '',
-          isAgree: false 
+          mobile: '13911111111',
+          code: '246810',
+          isAgree: true 
         },
         //checked: false,
         loginLoading: false,
@@ -86,6 +86,12 @@ export default {
             type: 'success'
             })
             this.loginLoading = false
+
+            //跳转到首页
+            //this.$router.push('/')
+            this.$router.push({
+                name:'home'
+            })
         }).catch(err => {
             console.log('登录失败',err)
             this.$message.error('登陆失败，请查看手机号码或验证码是否输入正确')
