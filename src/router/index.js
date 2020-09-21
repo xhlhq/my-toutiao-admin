@@ -40,4 +40,24 @@ const router = new VueRouter({
   routes
 })
 
+//导航守卫，所有的路由都会经过这里，可以用来拦截页面
+//to：到哪去（路由）
+//from：从哪里
+//next：放行方法
+//判断是否登录，可以判断本地存贮中是否有登录是保存的数据
+const user = JSON.parse(window.localStorage.getItem('user'))
+router.beforeEach((to, from, next) => {
+  if(to.path !== '/login'){
+    //判断是否登录
+    if(user){
+      next()
+    }else{
+      next('/login')
+    }
+  }else{
+    next()
+  }
+  //next()
+})
+
 export default router
