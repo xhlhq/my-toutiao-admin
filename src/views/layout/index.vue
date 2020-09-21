@@ -76,7 +76,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 .container {
     position: fixed;
     top: 0;
@@ -85,7 +85,7 @@ export default {
     right: 0;
 }
 .aside {
-    background-color: #666;
+    background-color: #343E3D;
     box-shadow: 1px 0 3px rgba(32, 50, 65, 0.5);
     .aside-menu {
         height: 100%;
@@ -108,6 +108,6 @@ export default {
     }
 }
 .main {
-    background-color: #fff;
+    background-color: #F1F9F4;
 }
 </style>

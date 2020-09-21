@@ -2,7 +2,7 @@
     <!-- 设置router可以让导航栏与路由对应起来 ,对应的路由放在index中-->
   <el-menu
       default-active="/"
-      background-color="#002055"
+      background-color="#343E3D"
       text-color="#fff"
       active-text-color="#ffd04b"
       router

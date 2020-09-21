@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style scoped lang="less">
 .login-index {
     position: fixed;
     top: 0;

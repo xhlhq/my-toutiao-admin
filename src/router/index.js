@@ -8,12 +8,9 @@ Vue.use(VueRouter)
 const LoginIndex = () => import(/* webpackChunkName: 'loginIndex' */ '@/views/login/index')
 const LayoutIndex = () => import(/* webpackChunkName: 'layoutIndex' */ '@/views/layout/index')
 const HomeIndex = () => import(/* webpackChunkName:  'homeIndex'*/ '@/views/home/index')
+const ArticleIndex = () => import(/* webpackChunkName: 'articleIndex' */ '@/views/article/index')
 
 const routes = [
-  {
-    path:'',
-    redirect: '/login'
-  },
   {
     path:'/login',
     name:'login',
@@ -29,6 +26,11 @@ const routes = [
         path: '',//path为空，会作为父路由的默认子路由
         name: 'home',
         component: HomeIndex
+      },
+      {
+        path:'/article',
+        name:'article',
+        component: ArticleIndex
       }
     ]
   }
