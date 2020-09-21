@@ -19,7 +19,7 @@
                 </div>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>设置</el-dropdown-item>
-                <el-dropdown-item>退出</el-dropdown-item>
+                <el-dropdown-item @click.native='onLogout'>退出</el-dropdown-item>
             </el-dropdown-menu>
             </el-dropdown>
         </el-header>
@@ -53,6 +53,24 @@ export default {
             requestUserProfile().then(res => {
                 this.user = res.data.data
             })
+        },
+        onLogout(){
+            this.$confirm('是否确认退出后台?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+            // //清除用户存在localStorage中的数据
+            window.localStorage.removeItem('user')
+            // //跳转到登录页面
+            this.$router.push('/login')
+            }).catch(() => {
+            this.$message({
+                type: 'info',
+                message: '已取消退出'
+            })          
+            })
+            
         }
     }
 }

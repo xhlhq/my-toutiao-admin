@@ -44,9 +44,9 @@ const router = new VueRouter({
 //to：到哪去（路由）
 //from：从哪里
 //next：放行方法
-//判断是否登录，可以判断本地存贮中是否有登录是保存的数据
-const user = JSON.parse(window.localStorage.getItem('user'))
 router.beforeEach((to, from, next) => {
+  //判断是否登录，可以判断本地存贮中是否有登录是保存的数据
+  const user = JSON.parse(window.localStorage.getItem('user'))
   if(to.path !== '/login'){
     //判断是否登录
     if(user){
