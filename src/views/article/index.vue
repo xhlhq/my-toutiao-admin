@@ -35,18 +35,22 @@
         </el-form-item>
         <el-form-item label="日期：">
             <el-date-picker
-            v-model="form.date1"
+            v-model="rangDate"
             type="daterange"
-            range-separator="至"
+            range-separator="-"
             start-placeholder="开始日期"
-            end-placeholder="结束日期">
+            end-placeholder="结束日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd">
             </el-date-picker>
         </el-form-item>
         
         <!-- 每次查询都重新加载文章 -->
         <el-form-item>
             <!-- button的click事件会默认传参，对重新加载文章产生影响 -->
-            <el-button type="primary" @click="loadArticles(1)">查询</el-button>
+            <el-button type="primary" 
+            :disabled="loading"
+            @click="loadArticles(1)">查询</el-button>
         </el-form-item>
     </el-form>
     </el-card>
@@ -59,7 +63,8 @@
     :data="articleData"
     stripe
     class = "list-table"
-    style="width: 100%">
+    style="width: 100%"
+    v-loading="loading">
     <el-table-column
         prop="date"
         label="封面"
@@ -122,6 +127,7 @@
         background
         :total="totalPage" 
         :page-size="pageSize"
+        :disabled="loading"
         @current-change="onCurrentChange">
     </el-pagination>
     </el-card>
@@ -148,19 +154,25 @@ export default {
             {status:4,text:'已删除',type:'info'}
         ],
         totalPage: 0,//总页数
-        pageSize: 20, //每页数据个数
+        pageSize: 15, //每页数据个数
         filterStatus: null, //筛选文章的状态
         channels: [], //文章频道
         channelId: null,//查询文章的频道
+        rangDate: [],//开始时间与结束时间
+        loading: true,//加载
       }
     },
     methods: {
       loadArticles(page = 1){
+          //展示加载中
+          this.loading = true
           getArticles({
               page: page,
               per_page: this.pageSize,
               status: this.filterStatus,
-              channel_id: this.channelId
+              channel_id: this.channelId,
+              begin_pubdate: this.rangDate ? this.rangDate[0] : null,
+              end_pubdate: this.rangDate ? this.rangDate[1] : null,
           }).then(res => {
               //console.log('getArticle:',res);
               //   this.articleData = res.data.data.results
@@ -168,6 +180,9 @@ export default {
               const {results, total_count: totalPage} = res.data.data
               this.articleData = results
               this.totalPage = totalPage
+
+              //关闭加载loading
+              this.loading = false
           })
       },
       onCurrentChange(page){
@@ -182,7 +197,7 @@ export default {
       }
     },
     created () {
-        this.loadArticles()
+        this.loadArticles(1)
         this.loadChannels()
     }
 }
@@ -195,7 +210,7 @@ export default {
 .list-table {
     margin-bottom: 20px;
     .article-cover {
-        width: 80px;
+        width: 50px;
         background-size: cover;
     }
 }
