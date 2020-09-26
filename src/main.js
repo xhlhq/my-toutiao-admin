@@ -9,6 +9,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 //加载全局样式文件
 import './styles/index.less'
 
+//json-bigint用于解析长数字字符串
+import JsonBigInt from 'json-bigint'
+
+//JsonBigInt.parse()和JsonBigInt.stringify()
+
+
 //全局注册element组件库
 Vue.use(ElementUI)
 

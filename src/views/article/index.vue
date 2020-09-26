@@ -105,17 +105,20 @@
     </el-table-column>
     <el-table-column
         label="操作">
-      <template>
+      <template slot-scope="scope">
         <el-button
           size="mini"
           circle
           type="primary"
-          ><i class="el-icon-edit"></i></el-button>
+          icon="el-icon-edit"
+          ></el-button>
         <el-button
           size="mini"
           type="danger"
           circle
-          ><i class="el-icon-delete"></i></el-button>
+          icon="el-icon-delete"
+          @click="onDeleteArticle(scope.row.id)"
+          ></el-button>
       </template>
     </el-table-column>
     </el-table>
@@ -128,6 +131,7 @@
         :total="totalPage" 
         :page-size="pageSize"
         :disabled="loading"
+        :current-page.sync = "currentPage"
         @current-change="onCurrentChange">
     </el-pagination>
     </el-card>
@@ -135,7 +139,7 @@
 </template>
 
 <script>
-import { getArticles, getArticleChannels } from '@/api/article'
+import { getArticles, getArticleChannels, deleteArticle } from '@/api/article'
 
 export default {
     name:'ArticleIndex',
@@ -160,6 +164,7 @@ export default {
         channelId: null,//查询文章的频道
         rangDate: [],//开始时间与结束时间
         loading: true,//加载
+        currentPage: 1,//当前的页码
       }
     },
     methods: {
@@ -194,7 +199,32 @@ export default {
               //console.log('channels:',res)
               this.channels = res.data.data.channels
           })
+      },
+      onDeleteArticle(articleId){
+            this.$confirm('确认删除吗?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+            }).then(() => {
+                deleteArticle(articleId.toString()).then(res => {
+                    // console.log(articleId.toString())
+                    // console.log(res)
+
+                    //删除完成，重新加载数据
+                    this.loadArticles(this.currentPage)
+                })
+            }).catch(() => {
+            this.$message({
+                type: 'info',
+                message: '已取消删除'
+            })          
+            })
+          //找数据接口       
+          //封装请求方法
+          //删除请求调用
+          //处理响应结果
       }
+      
     },
     created () {
         this.loadArticles(1)
