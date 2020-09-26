@@ -9,6 +9,8 @@ const LoginIndex = () => import(/* webpackChunkName: 'loginIndex' */ '@/views/lo
 const LayoutIndex = () => import(/* webpackChunkName: 'layoutIndex' */ '@/views/layout/index')
 const HomeIndex = () => import(/* webpackChunkName:  'homeIndex'*/ '@/views/home/index')
 const ArticleIndex = () => import(/* webpackChunkName: 'articleIndex' */ '@/views/article/index')
+const PublishIndex = () => import(/* webpackChunkName: 'publishIndex' */ '@/views/publish/index')
+const MaterialIndex = () => import(/* webpackChunkName: 'materialIndex' */ '@/views/material/index')
 
 const routes = [
   {
@@ -31,6 +33,16 @@ const routes = [
         path:'/article',
         name:'article',
         component: ArticleIndex
+      },
+      {
+        path: '/publish',
+        name: 'publish',
+        component: PublishIndex
+      },
+      {
+        path: 'material',
+        name: 'material',
+        component: MaterialIndex
       }
     ]
   }
