@@ -4,7 +4,7 @@
         <div slot="header" class="clearfix">
             <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>文章发布</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ $route.query.id ? '修改文章' : '发布文章' }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <el-form ref="form" :model="article" label-width="80px">
@@ -32,8 +32,8 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">立即发表</el-button>
-                <el-button>存入草稿</el-button>
+                <el-button type="primary" @click="onSubmit(false)">立即{{ $route.query.id ? '修改' : '发布' }}</el-button>
+                <el-button @click="onSubmit(true)">存入草稿</el-button>
             </el-form-item>
         </el-form>
     </el-card>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getArticleChannels } from '@/api/article'
+import { getArticleChannels, addArticle, editArticle, getArticle } from '@/api/article'
 export default {
     name:'PublishIndex',
     data() {
@@ -60,16 +60,53 @@ export default {
     },
     created () {
         this.loadChannels()
+
+        //判断是修改文章还是发布文章
+        if(this.$route.query.id){
+            this.loadEditArticle()
+        }
     },
     methods: {
-      onSubmit() {
-        console.log('submit!');
+        //发布文章
+      onSubmit(draft = false) {
+        //找到数据接口
+        //封装请求方法
+        //请求提交表单
+        //判断发布文章时是处在修改操作还是处在发布操作
+        if(this.$route.query.id){
+            //执行修改操作
+            editArticle(this.$route.query.id,this.article,draft).then(res => {
+                this.$message({
+                    message: `${draft ? '存入草稿' : '修改'}成功`,
+                    type: 'success'
+                })
+                //跳转到文章页面
+                this.$router.push('/article')
+            })
+            
+        }else{
+            addArticle(this.article,draft).then(res => {
+            //console.log(res)
+                this.$message({
+                    message: `${draft ? '存入草稿' : '发布'}成功`,
+                    type: 'success'
+                })
+                //跳转到文章页面
+                this.$router.push('/article')
+            })
+        }
+        //处理响应结果
       },
       loadChannels(){
           getArticleChannels().then(res => {
               //console.log('res',res)
               this.channels = res.data.data.channels
               //console.log('channels:',this.channels)
+          })
+      },
+      loadEditArticle(){
+          getArticle(this.$route.query.id).then(res => {
+              this.article = res.data.data
           })
       }
     }
