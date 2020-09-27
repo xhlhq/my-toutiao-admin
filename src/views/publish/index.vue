@@ -7,14 +7,20 @@
             <el-breadcrumb-item>{{ $route.query.id ? '修改文章' : '发布文章' }}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
-        <el-form ref="form" :model="article" label-width="80px">
-            <el-form-item label="标题">
+        <el-form ref="form" :model="article" label-width="60px">
+            <el-form-item label="标题：">
                 <el-input v-model="article.title"></el-input>
             </el-form-item>
-            <el-form-item label="内容">
-                <el-input v-model="article.content"></el-input>
+            <el-form-item label="内容：">
+                <!-- <el-input v-model="article.content"></el-input> -->
+                <el-tiptap 
+                v-model="article.content" 
+                :extensions="extensions"
+                lang="zh"
+                height="300"
+                placeholder="请输入文章内容"></el-tiptap>
             </el-form-item>
-            <el-form-item label="封面">
+            <el-form-item label="封面：">
                 <el-radio-group v-model="article.cover.type">
                 <el-radio label="单图"></el-radio>
                 <el-radio label="三图"></el-radio>
@@ -22,7 +28,7 @@
                 <el-radio label="自动"></el-radio>
                 </el-radio-group>
             </el-form-item>
-            <el-form-item label="频道">
+            <el-form-item label="频道：">
                 <el-select v-model="article.channel_id" placeholder="请选择频道">
                 <el-option 
                 v-for="(item,index) in channels" 
@@ -41,9 +47,38 @@
 </template>
 
 <script>
-import { getArticleChannels, addArticle, editArticle, getArticle } from '@/api/article'
+import { 
+getArticleChannels, 
+addArticle, 
+editArticle, 
+getArticle } from '@/api/article'
+
+import {
+  // 需要的 extensions
+  ElementTiptap,
+  Doc,
+  Text,
+  Paragraph,
+  Heading,
+  Bold,
+  Underline,
+  Italic,
+  Strike,
+  ListItem,
+  BulletList,
+  OrderedList,
+  FontSize, 
+  FontType,
+  Image, Fullscreen
+} from 'element-tiptap'
+import 'element-tiptap/lib/index.css'
+import { uploadImage } from '@/api/image'
+
 export default {
     name:'PublishIndex',
+    components: {
+        'el-tiptap': ElementTiptap,
+    },
     data() {
       return {
         article: {
@@ -55,7 +90,35 @@ export default {
             },
             channel_id: null //频道id
         },
-        channels: [] //文章频道列表
+        channels: [],//文章频道列表
+        //富文本编辑器
+        extensions: [
+        new Doc(),
+        new Text(),
+        new Paragraph(),
+        new Heading({ level: 5 }),
+        new Bold({ bubble: true }), // 在气泡菜单中渲染菜单按钮
+        new Underline({ bubble: true, menubar: false }), // 在气泡菜单而不在菜单栏中渲染菜单按钮
+        new Italic(),
+        new Strike(),
+        new ListItem(),
+        new BulletList(),
+        new OrderedList(),
+        new FontSize(),
+        new FontType(),
+        new Image({
+            //默认会把图片解析为base64格式,但可以自定义格式
+            //只要用户使用图片，就会返回一个图片地址
+            uploadRequest(file){
+                const fd = new FormData()
+                fd.append('image',file)
+                return uploadImage(fd).then(res => {
+                    return res.data.data.url
+                })
+            }
+        }),
+        new Fullscreen()
+      ]
       }
     },
     created () {
